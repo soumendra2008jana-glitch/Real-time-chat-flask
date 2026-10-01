@@ -1,7 +1,3 @@
-from gevent import monkey
-
-monkey.patch_all()
-
 import os
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -11,8 +7,8 @@ app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY", "chat-fallback-secret-key"
 )
 
-# Allow all origins so your deployed app can connect properly
-socketio = SocketIO(app, cors_allowed_origins="*")
+# async_mode='threading' works natively with simple-websocket
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
 
 
 @app.route("/")
